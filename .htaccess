@@ -1,0 +1,17 @@
+DirectoryIndex index.php public/index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Prevent 403 Forbidden when accessing root directory
+    RewriteRule ^$ public/index.php [L]
+
+    # Map static asset requests directly to public/ folder
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(assets|uploads)/(.*)$ public/$1/$2 [L]
+
+    # Send all other requests to public/index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ public/index.php [QSA,L]
+</IfModule>

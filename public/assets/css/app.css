@@ -1,0 +1,734 @@
+/**
+ * WARUNG KAURE POS & MANAGEMENT SYSTEM
+ * Design System & Custom Stylesheet
+ * Based on design.md
+ */
+
+:root {
+  --wk-primary: #6F4E37;
+  --wk-primary-dark: #533A29;
+  --wk-primary-light: #E9DDD3;
+  --wk-bg: #F8F5F2;
+  --wk-surface: #FFFFFF;
+  --wk-surface-elevated: #FFFFFF;
+  --wk-text: #2A211C;
+  --wk-text-muted: #73665E;
+  --wk-border: #E8E1DC;
+
+  --wk-radius-sm: 8px;
+  --wk-radius-md: 12px;
+  --wk-radius-lg: 16px;
+  --wk-font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+[data-bs-theme="dark"] {
+  --wk-primary: #C59B79;
+  --wk-primary-rgb: 197, 155, 121;
+  --wk-primary-dark: #A17556;
+  --wk-primary-light: #3D322A;
+  --wk-bg: #171411;
+  --wk-surface: #211C18;
+  --wk-surface-elevated: #2D2520;
+  --wk-text: #F8F5F2;
+  --wk-text-muted: #D1C4BA;
+  --wk-border: #44372F;
+
+  --bs-body-bg: var(--wk-bg);
+  --bs-body-color: var(--wk-text);
+  --bs-border-color: var(--wk-border);
+  --bs-secondary-color: var(--wk-text-muted);
+  --bs-secondary-bg: var(--wk-surface-elevated);
+  --bs-tertiary-bg: var(--wk-surface);
+}
+
+/* Global Theme Overrides for All Components */
+body {
+  font-family: var(--wk-font-family);
+  background-color: var(--wk-bg) !important;
+  color: var(--wk-text) !important;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.text-primary, .text-wk-primary {
+  color: var(--wk-primary) !important;
+}
+.bg-primary, .bg-wk-primary {
+  background-color: var(--wk-primary) !important;
+  color: #FFFFFF !important;
+}
+.bg-primary-subtle {
+  background-color: var(--wk-primary-light) !important;
+  color: var(--wk-primary-dark) !important;
+}
+[data-bs-theme="dark"] .bg-primary-subtle {
+  background-color: var(--wk-primary-light) !important;
+  color: var(--wk-primary) !important;
+}
+.border-primary, .border-wk {
+  border-color: var(--wk-primary) !important;
+}
+.border-primary-subtle {
+  border-color: var(--wk-primary-light) !important;
+}
+
+/* Brand & Standard Button Styling */
+.btn-primary, .btn-wk-primary {
+  background-color: var(--wk-primary) !important;
+  border-color: var(--wk-primary) !important;
+  color: #FFFFFF !important;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-primary:hover, .btn-primary:focus,
+.btn-wk-primary:hover, .btn-wk-primary:focus {
+  background-color: var(--wk-primary-dark) !important;
+  border-color: var(--wk-primary-dark) !important;
+  color: #FFFFFF !important;
+  transform: translateY(-1px);
+}
+.btn-primary:active, .btn-wk-primary:active {
+  transform: translateY(0);
+}
+
+.btn-outline-primary, .btn-wk-outline {
+  border: 1.5px solid var(--wk-primary) !important;
+  color: var(--wk-primary) !important;
+  background: transparent !important;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-outline-primary:hover, .btn-outline-primary:focus,
+.btn-wk-outline:hover, .btn-wk-outline:focus {
+  background-color: var(--wk-primary) !important;
+  border-color: var(--wk-primary) !important;
+  color: #FFFFFF !important;
+}
+
+/* Form controls focus & check inputs */
+.form-control:focus, .form-select:focus {
+  border-color: var(--wk-primary) !important;
+  box-shadow: 0 0 0 0.25rem rgba(var(--wk-primary-rgb), 0.25) !important;
+}
+.form-check-input:checked {
+  background-color: var(--wk-primary) !important;
+  border-color: var(--wk-primary) !important;
+}
+.form-check-input:focus {
+  border-color: var(--wk-primary) !important;
+  box-shadow: 0 0 0 0.25rem rgba(var(--wk-primary-rgb), 0.25) !important;
+}
+
+/* Pagination & DataTables pagination */
+.pagination .page-item.active .page-link,
+.page-item.active > .page-link {
+  background-color: var(--wk-primary) !important;
+  border-color: var(--wk-primary) !important;
+  color: #FFFFFF !important;
+}
+.page-link {
+  color: var(--wk-primary) !important;
+}
+.page-link:hover {
+  color: var(--wk-primary-dark) !important;
+  background-color: var(--wk-primary-light) !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+  background: var(--wk-primary) !important;
+  border-color: var(--wk-primary) !important;
+  color: #FFFFFF !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background: var(--wk-primary-light) !important;
+  border-color: var(--wk-primary-light) !important;
+  color: var(--wk-primary-dark) !important;
+}
+.dataTables_wrapper .dataTables_filter input:focus {
+  border-color: var(--wk-primary) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 0.2rem rgba(var(--wk-primary-rgb), 0.25) !important;
+}
+
+/* Tables */
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--wk-text);
+  --bs-table-border-color: var(--wk-border);
+}
+.table-light, thead.table-light th, .table thead th {
+  background-color: var(--wk-primary-light) !important;
+  color: var(--wk-text) !important;
+  border-color: var(--wk-border) !important;
+}
+.table-hover tbody tr:hover {
+  background-color: rgba(var(--wk-primary-rgb), 0.05) !important;
+  color: var(--wk-text) !important;
+}
+[data-bs-theme="dark"] .table-light, 
+[data-bs-theme="dark"] thead.table-light th,
+[data-bs-theme="dark"] .table thead th {
+  background-color: var(--wk-surface-elevated) !important;
+  color: var(--wk-text) !important;
+  border-color: var(--wk-border) !important;
+}
+[data-bs-theme="dark"] .table-hover tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: var(--wk-text) !important;
+}
+
+/* Modals & Dropdowns */
+.modal-content {
+  background-color: var(--wk-surface) !important;
+  border-color: var(--wk-border) !important;
+  color: var(--wk-text) !important;
+}
+.dropdown-menu {
+  background-color: var(--wk-surface) !important;
+  border-color: var(--wk-border) !important;
+  color: var(--wk-text) !important;
+}
+.dropdown-item:active, .dropdown-item.active {
+  background-color: var(--wk-primary) !important;
+  color: #FFFFFF !important;
+}
+
+/* Badges */
+.badge.bg-light {
+  background-color: var(--wk-surface-elevated) !important;
+  color: var(--wk-text) !important;
+  border: 1px solid var(--wk-border) !important;
+}
+.bg-wk-surface {
+  background-color: var(--wk-surface) !important;
+}
+
+/* Top Navbar */
+.wk-navbar {
+  background-color: var(--wk-surface);
+  border-bottom: 1px solid var(--wk-border);
+  height: 62px;
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+
+.wk-navbar .dropdown-menu {
+  z-index: 1035;
+}
+
+/* Modals and backdrops must always sit above the top navbar header */
+.modal-backdrop {
+  z-index: 1060 !important;
+}
+
+.modal {
+  z-index: 1065 !important;
+}
+
+/* User Profile Dropdown Button in Navbar */
+.wk-nav-profile-btn {
+  background-color: var(--wk-surface);
+  color: var(--wk-text);
+  border: 1px solid var(--wk-border) !important;
+  transition: all 0.2s ease;
+}
+.wk-nav-profile-btn:hover,
+.wk-nav-profile-btn:focus,
+.wk-nav-profile-btn[aria-expanded="true"] {
+  background-color: var(--wk-surface-elevated);
+  color: var(--wk-text);
+  border-color: var(--wk-primary) !important;
+}
+.wk-nav-profile-name {
+  color: var(--wk-text) !important;
+}
+
+/* Owner Cashier Picker in POS */
+.owner-cashier-box {
+  background-color: var(--wk-surface-elevated) !important;
+  border: 1px solid var(--wk-border) !important;
+}
+.owner-cashier-label {
+  color: var(--wk-text) !important;
+}
+.owner-cashier-picker {
+  background-color: var(--wk-surface) !important;
+  color: var(--wk-text) !important;
+  border-color: var(--wk-border) !important;
+}
+.owner-cashier-picker:focus {
+  background-color: var(--wk-surface) !important;
+  color: var(--wk-text) !important;
+  border-color: var(--wk-primary) !important;
+}
+.owner-cashier-picker option {
+  background-color: var(--wk-surface) !important;
+  color: var(--wk-text) !important;
+}
+
+.wk-brand-wordmark {
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 0.5px;
+  color: var(--wk-primary) !important;
+  text-decoration: none;
+}
+
+/* Sidebar for Desktop */
+.wk-sidebar {
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
+  flex-shrink: 0;
+  align-self: stretch;
+  background-color: var(--wk-surface);
+  border-right: 1px solid var(--wk-border);
+  min-height: calc(100vh - 62px);
+  position: sticky;
+  top: 62px;
+  height: calc(100vh - 62px);
+  overflow-y: auto;
+  padding: 1.25rem 0.75rem;
+}
+
+.wk-sidebar-heading {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.75px;
+  text-transform: uppercase;
+  color: var(--wk-text-muted);
+  padding: 0.75rem 0.75rem 0.25rem;
+}
+
+.wk-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  color: var(--wk-text);
+  font-size: 0.92rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: var(--wk-radius-sm);
+  transition: all 0.15s ease-in-out;
+}
+.wk-nav-link:hover {
+  background-color: var(--wk-primary-light);
+  color: var(--wk-primary-dark);
+}
+.wk-nav-link.active {
+  background-color: var(--wk-primary);
+  color: #FFFFFF;
+}
+
+/* Offcanvas Mobile Sidebar */
+.offcanvas.wk-mobile-sidebar {
+  background-color: var(--wk-surface);
+  color: var(--wk-text);
+  border-right: 1px solid var(--wk-border);
+}
+
+/* Cards */
+.wk-card {
+  background-color: var(--wk-surface);
+  border: 1px solid var(--wk-border);
+  border-radius: var(--wk-radius-md);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+  transition: all 0.2s ease;
+}
+
+/* POS Layout */
+.pos-container {
+  padding-bottom: 85px; /* space for sticky cart bar on mobile */
+}
+
+@media (min-width: 992px) {
+  .pos-container {
+    padding-bottom: 1.5rem;
+  }
+}
+
+/* Category Pills Horizontal Scroll */
+.pos-categories-scroll {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.pos-categories-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.pos-cat-pill {
+  padding: 0.45rem 1rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid var(--wk-border);
+  background-color: var(--wk-surface);
+  color: var(--wk-text);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+.pos-cat-pill:hover {
+  background-color: var(--wk-primary-light);
+}
+.pos-cat-pill.active {
+  background-color: var(--wk-primary);
+  border-color: var(--wk-primary);
+  color: #FFFFFF;
+}
+
+/* Vertical Category Pills (category_grid layout) */
+.pos-categories-v {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.pos-cat-pill-v {
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--wk-radius-sm);
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: 1px solid var(--wk-border);
+  background-color: var(--wk-surface);
+  color: var(--wk-text);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+.pos-cat-pill-v:hover {
+  background-color: var(--wk-primary-light);
+  color: var(--wk-primary-dark);
+}
+.pos-cat-pill-v.active {
+  background-color: var(--wk-primary);
+  border-color: var(--wk-primary);
+  color: #FFFFFF !important;
+}
+
+/* POS Table/List Layout Styles */
+.pos-table-item {
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+.pos-table-item:hover {
+  background-color: rgba(111, 78, 55, 0.08) !important;
+}
+[data-bs-theme="dark"] .pos-table-item:hover {
+  background-color: rgba(185, 138, 104, 0.15) !important;
+}
+.pos-table-item.out-of-stock {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Table row in table_list POS layout */
+.modern-product-row {
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+.modern-product-row:hover td {
+  background-color: rgba(111, 78, 55, 0.07) !important;
+}
+.modern-product-row.out-of-stock {
+  cursor: not-allowed;
+}
+
+/* POS Large Grid Scroll Area */
+.pos-grid-scroll {
+  max-height: calc(100vh - 220px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+  padding-bottom: 2rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(111, 78, 55, 0.2) transparent;
+}
+.pos-grid-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.pos-grid-scroll::-webkit-scrollbar-thumb {
+  background: rgba(111, 78, 55, 0.25);
+  border-radius: 4px;
+}
+@media (max-width: 991.98px) {
+  .pos-grid-scroll {
+    max-height: none !important;
+    padding-bottom: 5.5rem;
+  }
+}
+
+/* Product Card in Grid */
+.product-card {
+  cursor: pointer;
+  user-select: none;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--wk-radius-md);
+  border: 1px solid var(--wk-border);
+  background-color: var(--wk-surface);
+  overflow: hidden;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+.product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(111, 78, 55, 0.12);
+  border-color: var(--wk-primary);
+}
+.product-card:active {
+  transform: scale(0.98);
+}
+.product-card.out-of-stock {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.product-img-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: var(--wk-primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.product-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Sticky Bottom Cart Bar (Mobile) */
+.pos-mobile-cart-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--wk-surface);
+  border-top: 1px solid var(--wk-border);
+  padding: 0.75rem 1rem;
+  z-index: 1010;
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.06);
+}
+
+/* Stepper buttons */
+.stepper-btn {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid var(--wk-border);
+  background-color: var(--wk-surface);
+  color: var(--wk-text);
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.stepper-btn:hover {
+  background-color: var(--wk-primary-light);
+  color: var(--wk-primary-dark);
+}
+
+/* Thermal Receipt & General Report Print Styles */
+@media print {
+  /* Hide navigation, top navbar, sidebars, offcanvas, buttons, and modals */
+  .no-print,
+  .wk-navbar,
+  .wk-sidebar,
+  .offcanvas,
+  .btn,
+  .btn-close,
+  .modal-backdrop,
+  nav,
+  header {
+    display: none !important;
+  }
+
+  /* Reset layout for clean report printing */
+  html, body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    font-family: var(--wk-font-family);
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    overflow: visible !important;
+  }
+
+  .wk-card {
+    border: 1px solid #E0E0E0 !important;
+    box-shadow: none !important;
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .table {
+    color: #000000 !important;
+    border-color: #CCCCCC !important;
+  }
+
+  .table thead th {
+    background-color: #F8F9FA !important;
+    color: #000000 !important;
+  }
+
+  .table td, .table th {
+    color: #000000 !important;
+  }
+
+  /* Thermal Receipt Mode (when on receipt view) */
+  .receipt-print-area {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Struk Container */
+.receipt-box {
+  background: #FFFFFF;
+  color: #000000;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  line-height: 1.35;
+  padding: 1.5rem 1rem;
+  max-width: 380px;
+  margin: 0 auto;
+  border: 1px dashed #CCCCCC;
+}
+.receipt-box hr {
+  border-top: 1px dashed #000000;
+  margin: 0.5rem 0;
+  opacity: 0.75;
+}
+
+/* ==========================================================================
+   Dark Mode High-Contrast Overrides & UI Fixes
+   ========================================================================== */
+[data-bs-theme="dark"] .bg-body-secondary {
+  background-color: var(--wk-surface-elevated) !important;
+  color: var(--wk-text) !important;
+}
+
+[data-bs-theme="dark"] .bg-light {
+  background-color: var(--wk-surface-elevated) !important;
+  color: var(--wk-text) !important;
+}
+
+[data-bs-theme="dark"] .badge.bg-light,
+[data-bs-theme="dark"] .badge.bg-light.text-dark {
+  background-color: var(--wk-surface-elevated) !important;
+  color: var(--wk-text) !important;
+  border: 1px solid var(--wk-border) !important;
+}
+
+/* Ensure text-dark elements stay crisp & readable in dark mode, except on bright warning/info tags */
+[data-bs-theme="dark"] .text-dark:not(.bg-warning):not(.bg-info):not(.btn-warning):not(.badge-warning):not(.badge-info):not(.bg-warning *):not(.bg-info *):not(.btn-warning *) {
+  color: var(--wk-text) !important;
+}
+
+[data-bs-theme="dark"] code.text-dark {
+  color: #FCA5A5 !important;
+}
+
+[data-bs-theme="dark"] .card,
+[data-bs-theme="dark"] .wk-card {
+  background-color: var(--wk-surface) !important;
+  color: var(--wk-text) !important;
+  border-color: var(--wk-border) !important;
+}
+
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select {
+  background-color: var(--wk-surface) !important;
+  color: var(--wk-text) !important;
+  border-color: var(--wk-border) !important;
+}
+
+[data-bs-theme="dark"] .form-control:focus,
+[data-bs-theme="dark"] .form-select:focus {
+  background-color: var(--wk-surface) !important;
+  color: var(--wk-text) !important;
+  border-color: var(--wk-primary) !important;
+}
+
+[data-bs-theme="dark"] .form-control::placeholder {
+  color: var(--wk-text-muted) !important;
+  opacity: 0.8;
+}
+
+[data-bs-theme="dark"] .input-group-text {
+  background-color: var(--wk-surface-elevated) !important;
+  color: var(--wk-text) !important;
+  border-color: var(--wk-border) !important;
+}
+
+[data-bs-theme="dark"] .modal-content {
+  background-color: var(--wk-surface) !important;
+  color: var(--wk-text) !important;
+  border-color: var(--wk-border) !important;
+}
+
+[data-bs-theme="dark"] .dropdown-menu {
+  background-color: var(--wk-surface) !important;
+  color: var(--wk-text) !important;
+  border-color: var(--wk-border) !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5) !important;
+}
+
+[data-bs-theme="dark"] .dropdown-item {
+  color: var(--wk-text) !important;
+}
+
+[data-bs-theme="dark"] .dropdown-item:hover,
+[data-bs-theme="dark"] .dropdown-item:focus {
+  background-color: var(--wk-surface-elevated) !important;
+  color: var(--wk-text) !important;
+}
+
+[data-bs-theme="dark"] .dropdown-divider {
+  border-color: var(--wk-border) !important;
+}
+
+[data-bs-theme="dark"] .border-bottom,
+[data-bs-theme="dark"] .border-top,
+[data-bs-theme="dark"] .border-start,
+[data-bs-theme="dark"] .border-end {
+  border-color: var(--wk-border) !important;
+}
+
+/* Quick cash preset button active state styling */
+.btn-quick-cash.active {
+  background-color: var(--wk-primary) !important;
+  border-color: var(--wk-primary) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 0 2px var(--wk-surface), 0 0 0 4px var(--wk-primary) !important;
+}

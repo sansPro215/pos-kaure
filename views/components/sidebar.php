@@ -38,6 +38,9 @@ if (!function_exists('is_active')) {
         <a href="<?= url('/categories') ?>" class="wk-nav-link <?= is_active('/categories', $currentUri) ?>">
             <i class="bi bi-tags"></i> Kategori
         </a>
+        <a href="<?= url('/inventory') ?>" class="wk-nav-link <?= is_active('/inventory', $currentUri) ?>">
+            <i class="bi bi-boxes"></i> Kelola Stok
+        </a>
 
         <div class="wk-sidebar-heading mt-2">Laporan & Biaya</div>
         <a href="<?= url('/reports/sales') ?>" class="wk-nav-link <?= is_active('/reports/sales', $currentUri) ?>">

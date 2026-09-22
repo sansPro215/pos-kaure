@@ -184,7 +184,8 @@ class ProductRepository
 
     public static function updateStock(int $id, int $newStock): bool
     {
-        return true;
+        $sql = "UPDATE products SET stock = ? WHERE id = ?";
+        return Database::execute($sql, [$newStock, $id]);
     }
 
     public static function updateCostPrice(int $id, float $costPrice): bool

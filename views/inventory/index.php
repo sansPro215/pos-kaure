@@ -1,25 +1,19 @@
 <div class="container-fluid px-0">
-    <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-2 mb-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
         <div>
-            <h4 class="fw-bold mb-1">Kelola Stok Produk</h4>
-            <p class="text-muted small mb-0">Pantau ketersediaan stok seluruh menu produk. Anda dapat menambah, mengurangi, dan menghapus sisa stok secara langsung.</p>
+            <h4 class="fw-bold mb-0 mb-sm-1">Kelola Stok Produk</h4>
+            <p class="text-muted small mb-0 d-none d-sm-block">Pantau ketersediaan stok seluruh menu produk. Anda dapat menambah, mengurangi, dan menghapus sisa stok secara langsung.</p>
         </div>
-        <div class="d-flex flex-wrap gap-2">
-            <button class="btn btn-success btn-sm px-3 py-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#stockInModal">
-                <i class="bi bi-plus-circle me-1"></i> Tambah Stok
+        <div class="d-flex align-items-center gap-2 flex-nowrap flex-shrink-0">
+            <button class="btn btn-success btn-sm px-2 px-sm-3 py-2 shadow-sm text-nowrap" data-bs-toggle="modal" data-bs-target="#stockInModal" title="Tambah Stok">
+                <i class="bi bi-plus-circle me-0 me-sm-1"></i><span class="d-none d-sm-inline">Tambah Stok</span>
             </button>
-            <button class="btn btn-danger btn-sm px-3 py-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#stockOutModal">
-                <i class="bi bi-dash-circle me-1"></i> Kurangi Stok
+            <button class="btn btn-danger btn-sm px-2 px-sm-3 py-2 shadow-sm text-nowrap" data-bs-toggle="modal" data-bs-target="#stockOutModal" title="Kurangi Stok">
+                <i class="bi bi-dash-circle me-0 me-sm-1"></i><span class="d-none d-sm-inline">Kurangi Stok</span>
             </button>
-            <button class="btn btn-dark btn-sm px-3 py-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#stockResetModal">
-                <i class="bi bi-trash3 me-1"></i> Hapus Stok (0)
+            <button class="btn btn-dark btn-sm px-2 px-sm-3 py-2 shadow-sm text-nowrap" data-bs-toggle="modal" data-bs-target="#stockResetModal" title="Hapus Stok (0)">
+                <i class="bi bi-trash3 me-0 me-sm-1"></i><span class="d-none d-sm-inline">Hapus Stok (0)</span>
             </button>
-            <button class="btn btn-warning btn-sm px-3 py-2 text-dark shadow-sm" data-bs-toggle="modal" data-bs-target="#stockAdjustModal">
-                <i class="bi bi-sliders me-1"></i> Opname Fisik
-            </button>
-            <a href="<?= url('/inventory/history') ?>" class="btn btn-outline-secondary btn-sm px-3 py-2 shadow-sm">
-                <i class="bi bi-clock-history me-1"></i> Riwayat Mutasi
-            </a>
         </div>
     </div>
 
@@ -84,9 +78,6 @@
                                     <button type="button" class="btn btn-outline-dark" title="Hapus / Kosongkan Stok ke 0" onclick="quickStockAction('Reset', <?= $p['id'] ?>)">
                                         <i class="bi bi-trash3"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline-warning text-dark" title="Penyesuaian Opname Fisik" onclick="quickStockAction('Adjust', <?= $p['id'] ?>)">
-                                        <i class="bi bi-sliders"></i>
-                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -119,20 +110,9 @@
                         </select>
                     </div>
 
-                    <div class="row g-2 mb-3">
-                        <div class="col-6">
-                            <label class="form-label fw-semibold small">Jumlah Tambah (pcs) <span class="text-danger">*</span></label>
-                            <input type="number" step="1" name="qty" id="stockInQty" class="form-control form-control-lg fw-bold" placeholder="0" min="1" required>
-                        </div>
-                        <div class="col-6">
-                            <label class="form-label fw-semibold small">Biaya Beli/Modal Satuan (Rp)</label>
-                            <input type="number" step="0.01" name="cost" class="form-control form-control-lg" placeholder="Opsional" min="0">
-                        </div>
-                    </div>
-
                     <div class="mb-3">
-                        <label class="form-label fw-semibold small">Catatan / Supplier / Keterangan</label>
-                        <input type="text" name="note" class="form-control" placeholder="Contoh: Restock pesanan supplier / Produksi baru">
+                        <label class="form-label fw-semibold small">Jumlah Tambah (pcs) <span class="text-danger">*</span></label>
+                        <input type="number" step="1" name="qty" id="stockInQty" class="form-control form-control-lg fw-bold" placeholder="0" min="1" required>
                     </div>
                 </div>
                 <div class="modal-footer border-top p-3">
@@ -238,54 +218,12 @@
     </div>
 </div>
 
-<!-- MODAL 4: PENYESUAIAN STOK (STOCK OPNAME) -->
-<div class="modal fade" id="stockAdjustModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <form action="<?= url('/inventory/adjust') ?>" method="POST">
-                <?= csrf_field() ?>
-                <div class="modal-header border-bottom py-3">
-                    <h5 class="modal-title fw-bold"><i class="bi bi-sliders text-warning me-2"></i>Penyesuaian Stok (Opname Fisik)</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold small">Pilih Produk <span class="text-danger">*</span></label>
-                        <select name="item_id" id="stockAdjustProdId" class="form-select" required>
-                            <?php foreach ($allProds as $p): ?>
-                                <option value="<?= $p['id'] ?>">
-                                    <?= e($p['name']) ?> (Sistem: <?= (int)$p['stock'] ?> pcs)
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold small">Stok Fisik Sebenarnya (Hasil Hitung Riil) <span class="text-danger">*</span></label>
-                        <input type="number" step="1" name="physical_stock" id="stockAdjustPhysical" class="form-control form-control-lg fw-bold" placeholder="Hasil hitung riil di kedai" min="0" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold small">Alasan Penyesuaian <span class="text-danger">*</span></label>
-                        <input type="text" name="reason" class="form-control" placeholder="Contoh: Hasil stock opname berkala" required>
-                    </div>
-                </div>
-                <div class="modal-footer border-top p-3">
-                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-warning text-dark btn-sm px-4">Simpan Penyesuaian</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <script>
 function quickStockAction(mode, itemId) {
     let selectEl = null;
     if (mode === 'In') selectEl = document.getElementById('stockInProdId');
     else if (mode === 'Out') selectEl = document.getElementById('stockOutProdId');
     else if (mode === 'Reset') selectEl = document.getElementById('stockResetProdId');
-    else if (mode === 'Adjust') selectEl = document.getElementById('stockAdjustProdId');
 
     if (selectEl && itemId) {
         selectEl.value = itemId;

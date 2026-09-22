@@ -146,17 +146,28 @@
                                                 <label class="form-label fw-semibold small">Tanggal</label>
                                                 <input type="date" name="date" class="form-control" value="<?= e($ex['date']) ?>" required>
                                             </div>
+                                            <?php 
+                                                $stdCats = ['LISTRIK', 'AIR', 'GAS', 'TRANSPORT', 'KEBERSIHAN', 'LAINNYA'];
+                                                $isCustomCat = !in_array($ex['category'], $stdCats);
+                                                $selectedCat = $isCustomCat ? 'LAINNYA' : $ex['category'];
+                                            ?>
                                             <div class="mb-3">
                                                 <label class="form-label fw-semibold small">Kategori</label>
-                                                <select name="category" class="form-select" required>
-                                                    <option value="LISTRIK" <?= $ex['category'] === 'LISTRIK' ? 'selected' : '' ?>>Listrik (PLN)</option>
-                                                    <option value="AIR" <?= $ex['category'] === 'AIR' ? 'selected' : '' ?>>Galon</option>
-                                                    <option value="GAS" <?= $ex['category'] === 'GAS' ? 'selected' : '' ?>>Gas Elpiji</option>
-                                                    <option value="TRANSPORT" <?= $ex['category'] === 'TRANSPORT' ? 'selected' : '' ?>>Transport & Pengiriman</option>
-                                                    <option value="KEBERSIHAN" <?= $ex['category'] === 'KEBERSIHAN' ? 'selected' : '' ?>>Kebersihan & Sampah</option>
-                                                    <option value="LAINNYA" <?= $ex['category'] === 'LAINNYA' ? 'selected' : '' ?>>Lainnya</option>
+                                                <select name="category" id="editCategorySelect<?= $ex['id'] ?>" class="form-select" onchange="toggleEditCustomCategory(<?= $ex['id'] ?>)" required>
+                                                    <option value="LISTRIK" <?= $selectedCat === 'LISTRIK' ? 'selected' : '' ?>>Listrik (PLN)</option>
+                                                    <option value="AIR" <?= $selectedCat === 'AIR' ? 'selected' : '' ?>>Galon</option>
+                                                    <option value="GAS" <?= $selectedCat === 'GAS' ? 'selected' : '' ?>>Gas Elpiji</option>
+                                                    <option value="TRANSPORT" <?= $selectedCat === 'TRANSPORT' ? 'selected' : '' ?>>Transport & Pengiriman</option>
+                                                    <option value="KEBERSIHAN" <?= $selectedCat === 'KEBERSIHAN' ? 'selected' : '' ?>>Kebersihan & Sampah</option>
+                                                    <option value="LAINNYA" <?= $selectedCat === 'LAINNYA' ? 'selected' : '' ?>>Lainnya</option>
                                                 </select>
                                             </div>
+                                            <?php if (is_owner()): ?>
+                                            <div class="mb-3" id="editCustomCategoryDiv<?= $ex['id'] ?>" style="display: <?= $selectedCat === 'LAINNYA' ? 'block' : 'none' ?>;">
+                                                <label class="form-label fw-semibold small">Detail Kategori (Ketik Manual Opsional)</label>
+                                                <input type="text" name="custom_category" class="form-control" value="<?= $isCustomCat ? e($ex['category']) : '' ?>" placeholder="Contoh: Pembelian Alat">
+                                            </div>
+                                            <?php endif; ?>
                                             <div class="mb-3">
                                                 <label class="form-label fw-semibold small">Nominal (Rp)</label>
                                                 <input type="number" name="amount" class="form-control" value="<?= (float)$ex['amount'] ?>" min="0" required>
@@ -253,7 +264,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold small">Kategori <span class="text-danger">*</span></label>
-                        <select name="category" class="form-select" required>
+                        <select name="category" id="addCategorySelect" class="form-select" onchange="toggleAddCustomCategory()" required>
                             <option value="LISTRIK">Listrik (PLN)</option>
                             <option value="AIR">Galon</option>
                             <option value="GAS">Gas Elpiji</option>
@@ -262,6 +273,12 @@
                             <option value="LAINNYA" selected>Lainnya</option>
                         </select>
                     </div>
+                    <?php if (is_owner()): ?>
+                    <div class="mb-3" id="addCustomCategoryDiv">
+                        <label class="form-label fw-semibold small">Detail Kategori (Ketik Manual Opsional)</label>
+                        <input type="text" name="custom_category" class="form-control" placeholder="Contoh: Pembelian Alat">
+                    </div>
+                    <?php endif; ?>
                     <div class="mb-3">
                         <label class="form-label fw-semibold small">Nominal Biaya (Rp) <span class="text-danger">*</span></label>
                         <input type="number" name="amount" class="form-control" placeholder="Contoh: 150000" min="1" required>
@@ -279,3 +296,29 @@
         </div>
     </div>
 </div>
+
+<script>
+function toggleAddCustomCategory() {
+    const select = document.getElementById('addCategorySelect');
+    const customDiv = document.getElementById('addCustomCategoryDiv');
+    if (customDiv) {
+        if (select.value === 'LAINNYA') {
+            customDiv.style.display = 'block';
+        } else {
+            customDiv.style.display = 'none';
+        }
+    }
+}
+
+function toggleEditCustomCategory(id) {
+    const select = document.getElementById('editCategorySelect' + id);
+    const customDiv = document.getElementById('editCustomCategoryDiv' + id);
+    if (customDiv) {
+        if (select.value === 'LAINNYA') {
+            customDiv.style.display = 'block';
+        } else {
+            customDiv.style.display = 'none';
+        }
+    }
+}
+</script>

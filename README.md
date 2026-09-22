@@ -51,7 +51,7 @@ kasir/
 │   ├── categories/          # Manajemen kategori
 │   ├── ingredients/         # Manajemen bahan baku
 │   ├── recipes/             # Manajemen Resep / BOM (Bill of Materials)
-│   ├── inventory/           # Stok persediaan, Stock In (WAC), Stock Out, Opname, Mutasi
+│   ├── inventory/           # Stok persediaan, Stock In, Stock Out, Reset Stok ke 0
 │   ├── transactions/        # Riwayat transaksi, detail, Void & Refund
 │   ├── reports/             # Laporan penjualan, pembayaran (cash vs cashless), HPP & laba
 │   ├── users/               # Manajemen akun pegawai & tarif jam kerja
@@ -118,7 +118,7 @@ Sistem dilengkapi dua role pengguna dengan proteksi otorisasi backend:
 - **Username**: `owner`
 - **Password**: `owner123`
 - **Role**: `OWNER`
-- **Hak Akses**: Akses penuh ke Dashboard, POS, Produk, Resep BOM, Kelola Stok, Riwayat Mutasi, Void & Refund Transaksi, Laporan Keuangan, Penggajian 14 Hari, Absensi, Audit Log, dan Pengaturan.
+- **Hak Akses**: Akses penuh ke Dashboard, POS, Produk, Resep BOM, Kelola Stok, Void & Refund Transaksi, Laporan Keuangan, Penggajian 14 Hari, Absensi, Audit Log, dan Pengaturan.
 - *Fitur Otomatis*: Saat Owner pertama kali login setiap hari, sistem otomatis mencatatkan absensi masuk (auto clock-in) tanpa duplikasi.
 
 ### B. Akun Kasir (Staff)

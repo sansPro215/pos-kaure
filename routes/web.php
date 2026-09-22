@@ -12,6 +12,7 @@ use App\Controllers\UserController;
 use App\Controllers\AttendanceController;
 use App\Controllers\PayrollController;
 use App\Controllers\ExpenseController;
+use App\Controllers\InventoryController;
 use App\Controllers\AuditController;
 use App\Controllers\SettingController;
 
@@ -59,9 +60,13 @@ Router::post('/categories/create', [CategoryController::class, 'store'], ['auth'
 Router::post('/categories/{id}/update', [CategoryController::class, 'update'], ['auth', 'role:OWNER']);
 Router::post('/categories/{id}/delete', [CategoryController::class, 'delete'], ['auth', 'role:OWNER']);
 
-// Stock & Inventory routes redirected to /products (Stock Module removed)
-Router::get('/inventory', function() { header('Location: ' . \App\Core\Router::url('/products')); exit; }, ['auth', 'role:OWNER']);
-Router::get('/stock', function() { header('Location: ' . \App\Core\Router::url('/products')); exit; }, ['auth', 'role:OWNER']);
+// Inventory Management (Owner only)
+Router::get('/inventory', [InventoryController::class, 'index'], ['auth', 'role:OWNER']);
+Router::post('/inventory/stock-in', [InventoryController::class, 'stockIn'], ['auth', 'role:OWNER']);
+Router::post('/inventory/stock-out', [InventoryController::class, 'stockOut'], ['auth', 'role:OWNER']);
+Router::post('/inventory/reset', [InventoryController::class, 'resetStock'], ['auth', 'role:OWNER']);
+
+// Ingredients and Recipes routes disabled (Stock Module focused on Products)
 Router::get('/ingredients', function() { header('Location: ' . \App\Core\Router::url('/products')); exit; }, ['auth', 'role:OWNER']);
 Router::get('/recipes', function() { header('Location: ' . \App\Core\Router::url('/products')); exit; }, ['auth', 'role:OWNER']);
 Router::get('/recipes/{id}', function() { header('Location: ' . \App\Core\Router::url('/products')); exit; }, ['auth', 'role:OWNER']);

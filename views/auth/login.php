@@ -17,7 +17,7 @@
 <body class="d-flex align-items-center justify-content-center min-vh-100 p-3" style="background-color: var(--wk-bg);">
     <div class="w-100" style="max-width: 400px;">
         <div class="text-center mb-4">
-            <h2 class="wk-brand-wordmark fw-bold mb-1 text-uppercase" style="font-size: 1.75rem;"><?= e(shop_name()) ?></h2>
+            <h2 class="wk-brand-wordmark fw-bold mb-1 text-uppercase" style="font-size: 1.75rem;">Menopos</h2>
             <p class="text-muted small mb-0">Point of Sale & Management Kedai</p>
         </div>
 
@@ -64,13 +64,13 @@
 
             <div class="mt-4 pt-3 border-top text-center text-muted" style="font-size: 0.8rem;">
                 <div><strong>Akun Bawaan:</strong></div>
-                <div>Owner: <code>owner</code> / <code>owner123</code></div>
-                <div>Kasir: <code>kasir</code> / <code>kasir123</code></div>
+                <div>Owner: <code>owner</code> / <code>123</code></div>
+                <div>Kasir: <code>kasir</code> / <code>123</code></div>
             </div>
         </div>
 
         <div class="text-center mt-3 text-muted small d-flex align-items-center justify-content-center gap-2">
-            <span>&copy; <?= date('Y') ?> <?= e(shop_name()) ?></span>
+            <span>&copy; <?= date('Y') ?> Menopos</span>
             <span>•</span>
             <button id="themeToggleBtn" class="btn btn-sm btn-link text-decoration-none text-muted p-0" type="button">
                 <i id="themeToggleIcon" class="bi bi-moon-stars-fill"></i>

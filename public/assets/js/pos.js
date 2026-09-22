@@ -79,21 +79,24 @@ function initSearchFilter() {
 function initProductClicks() {
     document.querySelectorAll('.pos-product-item').forEach(card => {
         card.addEventListener('click', function() {
-            if (this.classList.contains('out-of-stock')) {
+            const cardInner = this.querySelector('.product-card');
+            const rawStock = this.getAttribute('data-stock') || (cardInner ? cardInner.getAttribute('data-stock') : null);
+            const stockVal = rawStock !== null ? parseFloat(rawStock) : 999999;
+
+            if (this.classList.contains('out-of-stock') || stockVal <= 0) {
                 if (window.Swal) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Stok Habis',
-                        text: 'Produk ini sedang tidak tersedia atau stok bahan baku habis.',
+                        text: 'Stok produk ini sudah habis (0) dan tidak dapat ditambahkan ke keranjang.',
                         confirmButtonColor: '#6F4E37'
                     });
                 } else {
-                    alert('Stok produk ini sedang habis.');
+                    alert('Stok produk ini sedang habis (0).');
                 }
                 return;
             }
 
-            const cardInner = this.querySelector('.product-card');
             const rawId = this.getAttribute('data-id') || (cardInner ? cardInner.getAttribute('data-id') : null);
             const rawName = this.getAttribute('data-name') || (cardInner ? cardInner.getAttribute('data-name') : '') || 'Produk';
             const rawPrice = this.getAttribute('data-price') || (cardInner ? cardInner.getAttribute('data-price') : null);
@@ -103,14 +106,14 @@ function initProductClicks() {
             const price = parseFloat(rawPrice || 0);
 
             if (productId > 0 && !isNaN(productId)) {
-                addToCart(productId, name, price);
+                addToCart(productId, name, price, stockVal);
             }
         });
     });
 }
 
 // 4. Cart Management
-function addToCart(productId, name, price) {
+function addToCart(productId, name, price, maxStock = 999999) {
     if (!productId || isNaN(productId)) {
         console.warn('addToCart called with invalid productId:', productId);
         return;
@@ -120,13 +123,45 @@ function addToCart(productId, name, price) {
     const existingIndex = cart.findIndex(item => item.product_id === productId);
 
     if (existingIndex > -1) {
+        const currentQty = cart[existingIndex].qty;
+        const currentMaxStock = cart[existingIndex].stock !== undefined ? cart[existingIndex].stock : maxStock;
+        
+        if (currentQty + 1 > currentMaxStock) {
+            if (window.Swal) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Stok Tidak Mencukupi!',
+                    text: `Stok untuk "${name}" tidak mencukupi. Sisa stok tersedia: ${currentMaxStock} pcs.`,
+                    confirmButtonColor: '#6F4E37'
+                });
+            } else {
+                alert(`Stok untuk "${name}" tidak mencukupi. Sisa stok: ${currentMaxStock} pcs.`);
+            }
+            return;
+        }
+
         cart[existingIndex].qty += 1;
     } else {
+        if (1 > maxStock) {
+            if (window.Swal) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Stok Habis!',
+                    text: `Stok untuk "${name}" telah habis (0).`,
+                    confirmButtonColor: '#6F4E37'
+                });
+            } else {
+                alert(`Stok untuk "${name}" telah habis (0).`);
+            }
+            return;
+        }
+
         cart.push({
             product_id: productId,
             name: name,
             price: safePrice,
-            qty: 1
+            qty: 1,
+            stock: maxStock
         });
     }
 
@@ -138,6 +173,20 @@ function updateQty(productId, change) {
     if (!item) return;
 
     const newQty = item.qty + change;
+
+    if (change > 0 && item.stock !== undefined && newQty > item.stock) {
+        if (window.Swal) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Stok Tidak Mencukupi!',
+                text: `Jumlah pesanan melebihi sisa stok "${item.name}" (Maksimal: ${item.stock} pcs).`,
+                confirmButtonColor: '#6F4E37'
+            });
+        } else {
+            alert(`Jumlah pesanan melebihi sisa stok "${item.name}" (Maksimal: ${item.stock} pcs).`);
+        }
+        return;
+    }
 
     if (newQty <= 0) {
         removeFromCart(productId);

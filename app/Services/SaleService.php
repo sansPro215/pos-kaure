@@ -42,6 +42,16 @@ class SaleService
                     throw new Exception("Produk " . ($item['name'] ?? 'ID #' . $productId) . " tidak ditemukan atau sudah nonaktif.");
                 }
 
+                // Strictly lock transaction if stock is empty (0) or insufficient
+                $currentStock = (float)$product['stock'];
+                if ($currentStock < $qty) {
+                    if ($currentStock <= 0) {
+                        throw new Exception("Transaksi gagal: Stok untuk produk '{$product['name']}' sudah habis (0).");
+                    } else {
+                        throw new Exception("Transaksi gagal: Stok untuk produk '{$product['name']}' tidak mencukupi (sisa: {$currentStock}, diminta: {$qty}).");
+                    }
+                }
+
                 $sellingPrice = (float)$product['selling_price'];
                 $itemSubtotal = $sellingPrice * $qty;
                 $subtotal += $itemSubtotal;
@@ -128,6 +138,9 @@ class SaleService
                 // Deduct stock for the product directly
                 $stockBefore = (float)$prod['stock'];
                 $stockAfter = $stockBefore - $qty;
+                if ($stockAfter < 0) {
+                    throw new Exception("Transaksi gagal: Stok produk '{$prod['name']}' tidak mencukupi.");
+                }
                 
                 ProductRepository::updateStock((int)$prod['id'], (int)$stockAfter);
                 
@@ -510,6 +523,20 @@ class SaleService
                 }
             }
 
+            // Validate stock sufficiency for all new items before applying changes
+            foreach ($newItemsToInsert as $itemToInsert) {
+                if (!empty($itemToInsert['product_id']) && $itemToInsert['product_id'] > 0) {
+                    $prod = ProductRepository::findByIdForUpdate((int)$itemToInsert['product_id']);
+                    if ($prod) {
+                        $currentStock = (float)$prod['stock'];
+                        $reqQty = (int)$itemToInsert['qty'];
+                        if ($currentStock < $reqQty) {
+                            throw new Exception("Stok produk '{$prod['name']}' tidak mencukupi untuk update transaksi (sisa: {$currentStock}, diminta: {$reqQty}).");
+                        }
+                    }
+                }
+            }
+
             TransactionRepository::deleteItems($transactionId);
             foreach ($newItemsToInsert as $itemToInsert) {
                 TransactionRepository::addItem($transactionId, $itemToInsert);
@@ -518,6 +545,9 @@ class SaleService
                     if ($prod) {
                         $stockBefore = (float)$prod['stock'];
                         $stockAfter = $stockBefore - (int)$itemToInsert['qty'];
+                        if ($stockAfter < 0) {
+                            throw new Exception("Stok produk '{$prod['name']}' tidak mencukupi.");
+                        }
                         ProductRepository::updateStock((int)$itemToInsert['product_id'], (int)$stockAfter);
                     }
                 }

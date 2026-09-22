@@ -69,13 +69,16 @@
                                             break;
                                         }
                                     }
+                                    $pStock = (float)($p['stock'] ?? 0);
+                                    $isOutOfStock = $pStock <= 0;
                                 ?>
-                                    <tr class="pos-product-item modern-product-row"
+                                    <tr class="pos-product-item modern-product-row <?= $isOutOfStock ? 'out-of-stock opacity-50 bg-light' : '' ?>"
                                         data-category-id="<?= $p['category_id'] ?>" 
                                         data-name="<?= e($p['name']) ?>" 
                                         data-sku="<?= e($p['sku']) ?>"
                                         data-id="<?= $p['id'] ?>"
                                         data-price="<?= $p['selling_price'] ?>"
+                                        data-stock="<?= $pStock ?>"
                                         style="cursor: pointer;">
                                         <td class="ps-3 py-2 text-center">
                                             <div class="rounded-2 overflow-hidden border bg-light d-inline-flex align-items-center justify-content-center shadow-xs" style="width: 40px; height: 40px;">
@@ -91,6 +94,13 @@
                                         </td>
                                         <td class="py-2">
                                             <div class="fw-bold text-dark" style="font-size: 0.92rem;"><?= e($p['name']) ?></div>
+                                            <div class="mt-1">
+                                                <?php if ($isOutOfStock): ?>
+                                                    <span class="badge bg-danger text-white" style="font-size: 0.68rem;">Stok Habis</span>
+                                                <?php else: ?>
+                                                    <span class="badge bg-secondary-subtle text-dark border px-1" style="font-size: 0.68rem;">Stok: <?= (int)$pStock ?></span>
+                                                <?php endif; ?>
+                                            </div>
                                         </td>
                                         <td class="py-2">
                                             <span class="badge bg-light text-dark border rounded-pill px-2 py-1 small"><?= e($catName) ?></span>
@@ -99,9 +109,15 @@
                                             <?= format_rupiah($p['selling_price']) ?>
                                         </td>
                                         <td class="text-center pe-3 py-2">
-                                            <button type="button" class="btn btn-sm btn-outline-primary py-1 px-3 d-inline-flex align-items-center gap-1">
-                                                <i class="bi bi-plus-lg"></i> <span>Tambah</span>
-                                            </button>
+                                            <?php if ($isOutOfStock): ?>
+                                                <button type="button" class="btn btn-sm btn-secondary py-1 px-3 d-inline-flex align-items-center gap-1" disabled style="pointer-events: none;">
+                                                    <i class="bi bi-slash-circle"></i> <span>Habis</span>
+                                                </button>
+                                            <?php else: ?>
+                                                <button type="button" class="btn btn-sm btn-outline-primary py-1 px-3 d-inline-flex align-items-center gap-1">
+                                                    <i class="bi bi-plus-lg"></i> <span>Tambah</span>
+                                                </button>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -131,18 +147,25 @@
                                     break;
                                 }
                             }
+                            $pStock = (float)($p['stock'] ?? 0);
+                            $isOutOfStock = $pStock <= 0;
                         ?>
-                            <div class="col-6 col-sm-4 col-md-3 col-xl-3 pos-product-item" 
+                            <div class="col-6 col-sm-4 col-md-3 col-xl-3 pos-product-item <?= $isOutOfStock ? 'out-of-stock' : '' ?>" 
                                  data-category-id="<?= $p['category_id'] ?>" 
                                  data-name="<?= e($p['name']) ?>" 
                                  data-sku="<?= e($p['sku']) ?>"
                                  data-id="<?= $p['id'] ?>"
                                  data-price="<?= $p['selling_price'] ?>"
+                                 data-stock="<?= $pStock ?>"
                                  style="cursor: pointer;">
-                                <div class="product-card h-100 shadow-sm border rounded-3 overflow-hidden"
+                                <div class="product-card h-100 shadow-sm border rounded-3 overflow-hidden position-relative <?= $isOutOfStock ? 'bg-light opacity-75' : '' ?>"
                                      data-id="<?= $p['id'] ?>"
                                      data-name="<?= e($p['name']) ?>"
-                                     data-price="<?= $p['selling_price'] ?>">
+                                     data-price="<?= $p['selling_price'] ?>"
+                                     data-stock="<?= $pStock ?>">
+                                    <?php if ($isOutOfStock): ?>
+                                        <span class="position-absolute top-0 start-0 m-2 badge bg-danger shadow-sm z-3" style="font-size: 0.72rem;">Stok Habis</span>
+                                    <?php endif; ?>
                                     <div class="product-img-wrapper">
                                         <?php if (!empty($p['image']) && file_exists(__DIR__ . '/../../public/uploads/products/' . $p['image'])): ?>
                                             <img src="<?= asset('/uploads/products/' . $p['image']) ?>" alt="<?= e($p['name']) ?>" loading="lazy">
@@ -152,7 +175,12 @@
                                     </div>
                                     <div class="p-2 p-sm-3 d-flex flex-column justify-content-between flex-grow-1">
                                         <div>
-                                            <div class="text-muted text-truncate mb-1" style="font-size: 0.72rem; letter-spacing: 0.2px;"><?= e($catName) ?></div>
+                                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                                <span class="text-muted text-truncate" style="font-size: 0.72rem; letter-spacing: 0.2px;"><?= e($catName) ?></span>
+                                                <?php if (!$isOutOfStock): ?>
+                                                    <span class="badge bg-secondary-subtle text-dark border px-1" style="font-size: 0.68rem;">Stok: <?= (int)$pStock ?></span>
+                                                <?php endif; ?>
+                                            </div>
                                             <div class="fw-semibold text-truncate small mb-1" title="<?= e($p['name']) ?>" style="font-size: 0.88rem; line-height: 1.3;">
                                                 <?= e($p['name']) ?>
                                             </div>
@@ -161,9 +189,15 @@
                                             <div class="fw-bold text-wk-primary small font-monospace" style="font-size: 0.9rem;">
                                                 <?= format_rupiah($p['selling_price']) ?>
                                             </div>
-                                            <span class="badge bg-light text-wk-primary border rounded-pill px-2 py-1 shadow-xs" style="font-size: 0.72rem;">
-                                                <i class="bi bi-plus-lg"></i>
-                                            </span>
+                                            <?php if ($isOutOfStock): ?>
+                                                <span class="badge bg-secondary text-white border rounded-pill px-2 py-1 shadow-xs" style="font-size: 0.72rem;">
+                                                    Habis
+                                                </span>
+                                            <?php else: ?>
+                                                <span class="badge bg-light text-wk-primary border rounded-pill px-2 py-1 shadow-xs" style="font-size: 0.72rem;">
+                                                    <i class="bi bi-plus-lg"></i>
+                                                </span>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>

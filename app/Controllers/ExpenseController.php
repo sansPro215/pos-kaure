@@ -66,6 +66,14 @@ class ExpenseController extends Controller
 
         $date = (string)$this->getPost('date', date('Y-m-d'));
         $category = (string)$this->getPost('category', 'LAINNYA');
+        
+        if ($category === 'LAINNYA' && is_owner()) {
+            $customCategory = trim((string)$this->getPost('custom_category'));
+            if (!empty($customCategory)) {
+                $category = strtoupper($customCategory);
+            }
+        }
+
         $amount = (float)$this->getPost('amount');
         $desc = trim((string)$this->getPost('description'));
 
@@ -113,6 +121,14 @@ class ExpenseController extends Controller
 
         $date = (string)$this->getPost('date');
         $category = (string)$this->getPost('category');
+        
+        if ($category === 'LAINNYA' && is_owner()) {
+            $customCategory = trim((string)$this->getPost('custom_category'));
+            if (!empty($customCategory)) {
+                $category = strtoupper($customCategory);
+            }
+        }
+
         $amount = (float)$this->getPost('amount');
         $desc = trim((string)$this->getPost('description'));
 

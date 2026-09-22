@@ -91,23 +91,4 @@ class InventoryController extends Controller
 
         $this->redirect('/inventory');
     }
-
-    public function history(): void
-    {
-        $itemType = $this->getQuery('item_type', 'PRODUCT');
-        $movementType = $this->getQuery('movement_type');
-        $startDate = $this->getQuery('start_date');
-        $endDate = $this->getQuery('end_date');
-
-        $movements = StockRepository::getMovements($itemType, null, $movementType, $startDate, $endDate, 200);
-
-        $this->view('inventory.history', [
-            'pageTitle' => 'Riwayat Mutasi Stok Produk',
-            'movements' => $movements,
-            'itemType' => $itemType,
-            'movementType' => $movementType,
-            'startDate' => $startDate,
-            'endDate' => $endDate
-        ]);
-    }
 }

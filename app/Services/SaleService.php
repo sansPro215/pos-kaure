@@ -6,6 +6,7 @@ use App\Core\Database;
 use App\Repositories\TransactionRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\AuditRepository;
+use App\Repositories\StockRepository;
 use Exception;
 
 class SaleService
@@ -124,6 +125,25 @@ class SaleService
                     'hpp' => $v['hpp']
                 ]);
 
+                // Deduct stock for the product directly
+                $stockBefore = (float)$prod['stock'];
+                $stockAfter = $stockBefore - $qty;
+                
+                ProductRepository::updateStock((int)$prod['id'], (int)$stockAfter);
+                
+                StockRepository::recordMovement(
+                    'TRANSACTION',
+                    $transId,
+                    'PRODUCT',
+                    (int)$prod['id'],
+                    'SALE',
+                    $qty,
+                    $stockBefore,
+                    $stockAfter,
+                    'pcs',
+                    "Penjualan Kasir POS " . $code,
+                    $cashierId
+                );
             }
 
             // 6. Insert Payment Record
@@ -187,6 +207,32 @@ class SaleService
 
             TransactionRepository::updateStatus($transactionId, 'VOID', $reason, $userId);
 
+            $items = TransactionRepository::getItems($transactionId);
+            foreach ($items as $item) {
+                $productId = (int)$item['product_id'];
+                if ($productId > 0) {
+                    $prod = ProductRepository::findByIdForUpdate($productId);
+                    if ($prod) {
+                        $stockBefore = (float)$prod['stock'];
+                        $stockAfter = $stockBefore + (int)$item['qty'];
+                        ProductRepository::updateStock($productId, (int)$stockAfter);
+                        StockRepository::recordMovement(
+                            'TRANSACTION',
+                            $transactionId,
+                            'PRODUCT',
+                            $productId,
+                            'VOID',
+                            (int)$item['qty'],
+                            $stockBefore,
+                            $stockAfter,
+                            'pcs',
+                            "Void Transaksi " . $trans['transaction_code'],
+                            $userId
+                        );
+                    }
+                }
+            }
+
             AuditRepository::log(
                 $userId,
                 'VOID_TRANSACTION',
@@ -243,7 +289,27 @@ class SaleService
                         [$newRefundedQty, $itemId]
                     );
 
-
+                    if ($returnStock && $item['product_id'] > 0) {
+                        $prod = ProductRepository::findByIdForUpdate((int)$item['product_id']);
+                        if ($prod) {
+                            $stockBefore = (float)$prod['stock'];
+                            $stockAfter = $stockBefore + $refundQty;
+                            ProductRepository::updateStock((int)$item['product_id'], (int)$stockAfter);
+                            StockRepository::recordMovement(
+                                'TRANSACTION',
+                                $transactionId,
+                                'PRODUCT',
+                                (int)$item['product_id'],
+                                'REFUND',
+                                $refundQty,
+                                $stockBefore,
+                                $stockAfter,
+                                'pcs',
+                                "Refund Transaksi " . $trans['transaction_code'],
+                                $userId
+                            );
+                        }
+                    }
                 }
 
                 $remaining = (int)$item['qty'] - ((int)$item['refunded_qty'] + $refundQty);
@@ -433,9 +499,28 @@ class SaleService
             ]);
 
             // 5. Replace items
+            foreach ($oldItems as $oldItem) {
+                if ($oldItem['product_id'] > 0) {
+                    $prod = ProductRepository::findByIdForUpdate((int)$oldItem['product_id']);
+                    if ($prod) {
+                        $stockBefore = (float)$prod['stock'];
+                        $stockAfter = $stockBefore + (int)$oldItem['qty'];
+                        ProductRepository::updateStock((int)$oldItem['product_id'], (int)$stockAfter);
+                    }
+                }
+            }
+
             TransactionRepository::deleteItems($transactionId);
             foreach ($newItemsToInsert as $itemToInsert) {
                 TransactionRepository::addItem($transactionId, $itemToInsert);
+                if ($itemToInsert['product_id'] > 0) {
+                    $prod = ProductRepository::findByIdForUpdate((int)$itemToInsert['product_id']);
+                    if ($prod) {
+                        $stockBefore = (float)$prod['stock'];
+                        $stockAfter = $stockBefore - (int)$itemToInsert['qty'];
+                        ProductRepository::updateStock((int)$itemToInsert['product_id'], (int)$stockAfter);
+                    }
+                }
             }
 
             // 6. Sync Payment
